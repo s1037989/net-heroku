@@ -112,7 +112,9 @@ sub add_key {
 sub keys {
   my ($self, %params) = (shift, @_);
 
-  return @{$self->ua->get('/user/keys')->res->json || []};
+  my $json = $self->ua->get('/user/keys')->res->json;
+  ref $json eq 'HASH' and die $json->{error};
+  return @{$json || []};
 }
 
 sub remove_key {
